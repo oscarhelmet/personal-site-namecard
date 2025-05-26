@@ -189,29 +189,97 @@ document.addEventListener('DOMContentLoaded', function() {
             displayValue = target;
         }
         
-        counter.textContent = displayValue + suffix;
+        // Add animation effect
+        let startValue = 0;
+        const duration = 2000; // 2 seconds
+        const increment = target > 100 ? Math.ceil(target / (duration / 20)) : 1;
+        const startTime = performance.now();
+        
+        function updateCounter(timestamp) {
+            const elapsed = timestamp - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            
+            if (target > 100) {
+                startValue = Math.min(Math.floor(target * progress), target);
+            } else {
+                startValue = Math.min(Math.floor(target * progress), target);
+            }
+            
+            // Format the display
+            let currentDisplay;
+            if (target >= 1000000) {
+                currentDisplay = (startValue / 1000000).toFixed(1);
+            } else if (target >= 1000) {
+                currentDisplay = (startValue / 1000).toFixed(0);
+            } else {
+                currentDisplay = startValue;
+            }
+            
+            counter.textContent = currentDisplay + suffix;
+            
+            if (progress < 1) {
+                requestAnimationFrame(updateCounter);
+            }
+        }
+        
+        // Start animation when counter is visible
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    requestAnimationFrame(updateCounter);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        observer.observe(counter);
     });
     
     // Expanded view toggle for mobile
     const expandButton = document.getElementById('expandButton');
     const bodyElement = document.body;
     
-    // Function to show all sections
+    // Function to show all sections with a smooth animation
     function showAllSections() {
         const sections = document.querySelectorAll('#highlights, #experience, #projects, #skills');
-        sections.forEach(section => {
+        bodyElement.classList.add('expanded');
+        
+        sections.forEach((section, index) => {
             section.style.display = 'block';
-            section.style.opacity = '1';
-            section.style.maxHeight = '5000px';
+            // Staggered animation for each section
+            setTimeout(() => {
+                section.style.opacity = '1';
+                section.style.maxHeight = 'none';
+                section.style.overflow = 'visible';
+                section.style.transform = 'translateY(0)';
+            }, index * 100);
         });
+        
+        // Scroll to the first section with smooth animation
+        if (sections.length > 0) {
+            setTimeout(() => {
+                sections[0].scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }, 100);
+        }
     }
     
-    // Function to hide sections
+    // Function to hide sections with animation
     function hideSections() {
         const sections = document.querySelectorAll('#highlights, #experience, #projects, #skills');
+        bodyElement.classList.remove('expanded');
+        
         sections.forEach(section => {
             section.style.opacity = '0';
-            section.style.maxHeight = '0';
+            section.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                section.style.display = 'none';
+                section.style.maxHeight = '0';
+                section.style.overflow = 'hidden';
+            }, 300);
         });
     }
     
@@ -219,15 +287,29 @@ document.addEventListener('DOMContentLoaded', function() {
     if (expandButton) {
         expandButton.addEventListener('click', function() {
             if (bodyElement.classList.contains('expanded')) {
-                bodyElement.classList.remove('expanded');
-                expandButton.textContent = 'View Full Portfolio';
+                this.textContent = 'View Full Portfolio';
                 hideSections();
+                
+                // Scroll back to top with smooth animation
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
             } else {
-                bodyElement.classList.add('expanded');
-                expandButton.textContent = 'Collapse View';
+                this.textContent = 'Collapse View';
                 showAllSections();
             }
         });
+        
+        // Initial state based on screen size
+        if (window.innerWidth <= 480 && !bodyElement.classList.contains('expanded')) {
+            hideSections();
+            expandButton.textContent = 'View Full Portfolio';
+        } else {
+            showAllSections();
+            expandButton.textContent = 'Collapse View';
+            bodyElement.classList.add('expanded');
+        }
     }
     
     // Mobile view check
@@ -241,7 +323,7 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             expandButton.style.display = 'block';
             
-            // Initially hide sections on mobile
+            // Initially hide sections on mobile if not expanded
             if (!bodyElement.classList.contains('expanded')) {
                 hideSections();
             }
@@ -251,6 +333,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initial check for mobile view
     checkMobileView();
     
-    // Check on resize
-    window.addEventListener('resize', checkMobileView);
+    // Check on resize with debounce for better performance
+    let resizeTimer;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(checkMobileView, 250);
+    });
 });

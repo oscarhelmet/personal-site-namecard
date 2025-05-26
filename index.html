@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Oscar So - Digital Portfolio</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="/static/style.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="static/style.css">
 </head>
 <body>
 <div class="animated-bg">
@@ -31,11 +31,15 @@
 <div class="container">
 <div class="profile-grid">
 <div class="profile-image-container">
-<div class="profile-image">OS</div>
+<div class="profile-image"><img src="static/icon.png" alt="Oscar So" class="profile-avatar"></div>
 </div>
 <div class="profile-details">
-<h1 class="profile-name typing-element" data-text="Oscar So, Chak Hei">Oscar So, Chak Hei</h1>
-<p class="profile-title typing-element" data-text="Data Scientist | AI Engineer | Software Engineer">Data Scientist | AI Engineer | Software Engineer</p>
+<h1 class="profile-name">Oscar So, Chak Hei</h1>
+<p class="profile-title">
+  Data Scientist<span class="separator"> | </span><br class="mobile-only">
+  AI Engineer<span class="separator"> | </span><br class="mobile-only">
+  Software Engineer
+</p>
 <div class="contact-links">
 <a href="mailto:oscarsoofficial@gmail.com" class="contact-link">
 <i class="fas fa-envelope"></i> Email
@@ -46,6 +50,7 @@
 <a href="https://github.com/oscarhelmet" target="_blank" class="contact-link">
 <i class="fab fa-github"></i> GitHub
 </a>
+</div>
 </div>
 </div>
 </div>
@@ -113,6 +118,31 @@ Sallux Education Limited | 2021 - 2023
 <section id="projects" class="section">
 <h2 class="section-title typing-element" data-text="Notable Projects">Notable Projects</h2>
 <div class="grid">
+
+<div class="card">
+<h3 class="card-title">Tradle</h3>
+<div class="company">
+<i class="fas fa-chart-line"></i>
+AI-Powered CFD Trading Journal
+</div>
+<ul class="achievements">
+<li>AI-Powered trade analysis using Google's Gemini API</li>
+<li>Comprehensive trade journaling and performance tracking</li>
+<li>AI-generated insights and suggestions to improve trading</li>
+<li>Modern UI with glassmorphism and responsive design</li>
+</ul>
+<div class="project-links">
+<a href="https://github.com/oscarhelmet/tradle" target="_blank" class="button github-button">
+<i class="fab fa-github"></i> Repository
+</a>
+<a href="https://tradle.oscarsoai.com" target="_blank" class="button demo-button">
+<i class="fas fa-external-link-alt"></i> Tradle
+</a>
+</div>
+</div>
+
+
+
 <div class="card">
 <h3 class="card-title">Eavest</h3>
 <div class="company">
@@ -197,6 +227,7 @@ Speech-to-Speech Translation
 </a>
 </div>
 </div>
+
 </div>
 </section>
 
@@ -233,7 +264,7 @@ Speech-to-Speech Translation
 </section>
 </main>
 
-<script src="/static/scripts.js"></script>
+<script src="static/scripts.js"></script>
 
 <!-- Widget Configuration -->
 <script>
